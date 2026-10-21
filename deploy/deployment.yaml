@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caesar-app
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: caesar-app
+  template:
+    metadata:
+      labels:
+        app: caesar-app
+    spec:
+      containers:
+        - name: app
+          image: toleratullu/caesar-app:latest # The workflow will overwrite this automatically!
+          ports:
+            - containerPort: 8000
