@@ -32,7 +32,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_HUB_USERNAME }}/caesar-app
+          images: ${{ secrets.DOCKER_USERNAME }}/caesar-app
           tags: |
             type=sha,format=short
 
