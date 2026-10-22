@@ -4,316 +4,624 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Caesar | Pods Together Strong</title>
-  <meta name="description" content="Project Caesar — a Kubernetes-powered platform inspired by the Roman Legions. Pods together strong." />
+  <meta name="description" content="Project Caesar — inspired by Caesar from Planet of the Apes. A Kubernetes-powered platform where Pods Together Strong." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --gold:        #c9a84c;
-      --gold-light:  #f0d080;
-      --gold-dark:   #8b6914;
-      --smoke:       #1a1a2e;
-      --smoke-mid:   #16213e;
-      --smoke-light: #0f3460;
-      --glass:       rgba(255,255,255,0.06);
-      --glass-border:rgba(201,168,76,0.25);
-      --text:        #e8dcc8;
-      --text-dim:    #a09070;
+      --amber:       #e8a030;
+      --amber-light: #f5c060;
+      --amber-dark:  #9a5f10;
+      --rust:        #c04010;
+      --rust-light:  #e06030;
+      --night:       #0a0c0e;
+      --night-mid:   #121820;
+      --night-light: #1c2530;
+      --glass:       rgba(255,255,255,0.05);
+      --glass-b:     rgba(232,160,48,0.2);
+      --text:        #d8cfc0;
+      --text-dim:    #786858;
+      --green-ok:    #4caf80;
     }
+
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background: var(--smoke); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-    #particles-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--night);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── PARTICLES ─── */
+    #canvas {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0; opacity: 0.35;
+    }
+
+    /* ─── NAV ─── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 3rem;
-      background: rgba(10,10,20,0.75); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--glass-border);
+      padding: 0.9rem 3rem;
+      background: rgba(8,10,12,0.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(232,160,48,0.18);
     }
+
     .nav-logo {
-      font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem; letter-spacing: 0.15em;
+      background: linear-gradient(135deg, var(--amber-light), var(--amber), var(--rust-light));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      letter-spacing: 0.08em;
     }
+
     nav ul { list-style: none; display: flex; gap: 2.5rem; }
     nav ul a {
-      font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.3s;
+      font-family: 'Oswald', sans-serif; font-size: 0.85rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      transition: color 0.25s;
     }
-    nav ul a:hover { color: var(--gold-light); }
+    nav ul a:hover { color: var(--amber-light); }
+
+    /* ─── HERO ─── */
     #hero {
       position: relative; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 6rem 2rem 4rem; overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 5rem;
+      overflow: hidden;
     }
+
     .hero-bg {
-      position: absolute; inset: 0;
-      background: url('/static/hero.jpg') center/cover no-repeat;
-      filter: brightness(0.30) saturate(1.3); z-index: 0;
-      animation: subtleZoom 20s ease-in-out infinite alternate;
+      position: absolute; inset: 0; z-index: 0;
+      background: url('/static/hero.jpg') center 20% / cover no-repeat;
+      filter: brightness(0.28) saturate(1.4) contrast(1.1);
+      animation: slowZoom 25s ease-in-out infinite alternate;
     }
-    @keyframes subtleZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
+    @keyframes slowZoom {
+      from { transform: scale(1.0); }
+      to   { transform: scale(1.08); }
+    }
+
     .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(232,160,48,0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(8,10,12,0.15) 0%, rgba(8,10,12,0.5) 55%, var(--night) 100%);
+    }
+
+    /* Vignette sides */
+    .hero-overlay::after {
+      content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(10,10,20,0.1) 0%, rgba(10,10,20,0.4) 60%, var(--smoke) 100%);
-      z-index: 1;
+      background: linear-gradient(to right, rgba(8,10,12,0.55) 0%, transparent 25%, transparent 75%, rgba(8,10,12,0.55) 100%);
     }
-    .hero-content { position: relative; z-index: 2; max-width: 900px; }
-    .spqr-badge {
-      display: inline-block; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.3em;
-      color: var(--gold); border: 1px solid var(--gold-dark); padding: 0.4rem 1.2rem; border-radius: 2px;
-      margin-bottom: 1.5rem; animation: fadeUp 0.8s ease both;
+
+    .hero-content { position: relative; z-index: 2; max-width: 920px; }
+
+    .eye-of-caesar {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'Oswald', sans-serif; font-size: 0.72rem; letter-spacing: 0.35em;
+      color: var(--amber); border: 1px solid rgba(232,160,48,0.35);
+      padding: 0.45rem 1.4rem; margin-bottom: 1.8rem;
+      clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0% 50%);
+      background: rgba(232,160,48,0.08);
+      animation: fadeUp 0.7s ease both;
     }
+
+    .eye-of-caesar::before,
+    .eye-of-caesar::after { content: '●'; font-size: 0.4rem; opacity: 0.6; }
+
     h1.hero-title {
-      font-family: 'Cinzel', serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 900;
-      line-height: 1.0; letter-spacing: 0.04em;
-      background: linear-gradient(135deg, #ffffff 30%, var(--gold-light) 70%, var(--gold) 100%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 11vw, 9rem);
+      letter-spacing: 0.06em; line-height: 0.9;
+      background: linear-gradient(160deg, #ffffff 20%, var(--amber-light) 55%, var(--amber) 80%, var(--rust-light) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      animation: fadeUp 0.9s ease 0.1s both;
+      animation: fadeUp 0.8s ease 0.1s both;
+      text-shadow: none;
+      filter: drop-shadow(0 0 60px rgba(232,160,48,0.25));
     }
+
     .hero-motto {
-      margin-top: 1.2rem; font-family: 'Cinzel', serif; font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
-      animation: fadeUp 0.9s ease 0.2s both;
+      margin-top: 1.4rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      letter-spacing: 0.25em; color: var(--amber);
+      text-shadow: 0 0 30px rgba(232,160,48,0.5);
+      animation: fadeUp 0.8s ease 0.2s both;
     }
+
+    .hero-divider {
+      width: 80px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--amber), transparent);
+      margin: 1.4rem auto;
+      animation: fadeUp 0.8s ease 0.25s both;
+    }
+
     .hero-sub {
-      margin-top: 1rem; font-size: 1.05rem; color: var(--text-dim);
-      max-width: 580px; margin-left: auto; margin-right: auto; line-height: 1.7;
-      animation: fadeUp 0.9s ease 0.3s both;
+      font-size: 1.05rem; color: var(--text-dim);
+      max-width: 600px; margin: 0 auto; line-height: 1.8;
+      animation: fadeUp 0.8s ease 0.3s both;
     }
+
     .hero-cta {
-      margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-      animation: fadeUp 0.9s ease 0.4s both;
+      margin-top: 2.8rem; display: flex; gap: 1rem;
+      justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 0.8s ease 0.4s both;
     }
+
     .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2rem;
-      border-radius: 3px; font-family: 'Cinzel', serif; font-size: 0.85rem;
-      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; text-decoration: none;
-      transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2.2rem; font-family: 'Oswald', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none; cursor: pointer; transition: all 0.3s;
+      clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0% 50%);
     }
     .btn-primary {
-      background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #0a0a14; font-weight: 700; border: none;
+      background: linear-gradient(135deg, var(--amber-dark), var(--amber));
+      color: #0a0c0e; font-weight: 600; border: none;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
-    .btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold-dark); }
-    .btn-outline:hover { background: rgba(201,168,76,0.1); transform: translateY(-2px); }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    .status-ticker {
-      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); z-index: 2;
-      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+    .btn-primary:hover { transform: scale(1.04); box-shadow: 0 0 30px rgba(232,160,48,0.5); }
+    .btn-outline {
+      background: rgba(232,160,48,0.07); color: var(--amber);
+      border: 1px solid rgba(232,160,48,0.35);
+    }
+    .btn-outline:hover { background: rgba(232,160,48,0.15); transform: scale(1.04); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── TICKER ─── */
+    .ticker {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
       animation: fadeUp 1s ease 0.6s both;
     }
-    .ticker-item {
-      background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px);
-      padding: 0.6rem 1.4rem; border-radius: 4px; font-size: 0.78rem; letter-spacing: 0.1em;
+    .tick {
+      background: rgba(8,10,12,0.7); border: 1px solid var(--glass-b);
+      backdrop-filter: blur(8px); padding: 0.55rem 1.2rem; border-radius: 2px;
+      font-family: 'Oswald', sans-serif; font-size: 0.72rem; letter-spacing: 0.18em;
       display: flex; align-items: center; gap: 0.5rem;
     }
-    .ticker-item .dot {
-      width: 7px; height: 7px; border-radius: 50%; background: #2ecc71;
-      box-shadow: 0 0 8px #2ecc71; animation: pulse 2s infinite;
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green-ok); box-shadow: 0 0 8px var(--green-ok);
+      animation: blink 2s ease infinite;
     }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    section { position: relative; z-index: 2; padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
-    .section-header { text-align: center; margin-bottom: 3.5rem; }
-    .section-tag { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.35em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
-    .section-title { font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #fff; line-height: 1.2; }
-    .section-title span { background: linear-gradient(135deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .divider { width: 60px; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 1rem auto 0; }
-    #legion-status { background: linear-gradient(135deg, rgba(22,33,62,0.6), rgba(15,52,96,0.3)); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); max-width: 100%; padding: 5rem 2rem; }
-    .status-inner { max-width: 1200px; margin: 0 auto; }
-    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
-    .status-card {
-      background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(12px);
-      border-radius: 8px; padding: 2rem 1.5rem; text-align: center; transition: transform 0.3s, box-shadow 0.3s;
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    /* ─── SECTION ─── */
+    .section-wrap { position: relative; z-index: 2; }
+
+    .inner { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem; }
+
+    .sec-tag {
+      font-family: 'Oswald', sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.35em; color: var(--amber); text-transform: uppercase;
+      margin-bottom: 0.5rem;
     }
-    .status-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(201,168,76,0.15); }
-    .status-card .card-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
-    .status-card .card-label { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.5rem; }
-    .status-card .card-value { font-size: 1.05rem; font-weight: 600; color: #fff; word-break: break-all; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .feature-card {
-      background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; padding: 2.2rem;
-      position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
+    .sec-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: 0.06em;
+      color: #fff; line-height: 1.1;
     }
-    .feature-card::before {
+    .sec-title em { font-style: normal; color: var(--amber); }
+    .bar { width: 50px; height: 2px; background: linear-gradient(to right, var(--rust), var(--amber)); margin: 1rem 0 0; }
+    .sec-header { text-align: center; margin-bottom: 3.5rem; }
+    .sec-header .bar { margin: 1rem auto 0; }
+
+    /* ─── STATUS SECTION ─── */
+    #status-section {
+      background: linear-gradient(135deg, rgba(18,24,32,0.8), rgba(10,12,14,0.9));
+      border-top: 1px solid rgba(232,160,48,0.12);
+      border-bottom: 1px solid rgba(232,160,48,0.12);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .stat-card {
+      background: var(--glass); border: 1px solid var(--glass-b);
+      backdrop-filter: blur(10px); border-radius: 4px;
+      padding: 1.8rem 1.4rem; text-align: center;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, var(--rust), var(--amber), var(--rust));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+    .stat-card:hover::before { transform: scaleX(1); }
+
+    .stat-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+    .stat-label {
+      font-family: 'Oswald', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.28em; color: var(--amber); margin-bottom: 0.5rem; text-transform: uppercase;
+    }
+    .stat-val { font-size: 0.98rem; font-weight: 600; color: #fff; word-break: break-all; }
+
+    /* ─── FEATURES ─── */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.8rem;
+    }
+    .feat-card {
+      background: var(--glass); border: 1px solid var(--glass-b);
+      border-radius: 4px; padding: 2.2rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .feat-card::after {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      background: linear-gradient(to right, transparent, var(--amber), transparent);
       transform: scaleX(0); transition: transform 0.4s ease;
     }
-    .feature-card:hover::before { transform: scaleX(1); }
-    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,0,0,0.4); }
-    .feature-icon { font-size: 2.5rem; margin-bottom: 1.2rem; }
-    .feature-title { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 0.8rem; }
-    .feature-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
-    .pipeline { display: flex; align-items: flex-start; justify-content: center; gap: 0; flex-wrap: wrap; margin-top: 1rem; }
-    .pipe-step { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; flex: 1; min-width: 130px; max-width: 180px; position: relative; }
-    .pipe-step:not(:last-child)::after { content: 'arrow_forward'; font-family: 'Material Icons'; position: absolute; right: -18px; top: 17px; color: var(--gold); font-size: 1.4rem; z-index: 1; }
-    .pipe-icon-wrap {
-      width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--gold);
-      display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
-      background: rgba(201,168,76,0.08); animation: glowPulse 3s ease infinite;
+    .feat-card:hover::after { transform: scaleX(1); }
+    .feat-card:hover { transform: translateY(-5px); box-shadow: 0 18px 55px rgba(0,0,0,0.45); }
+
+    .feat-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem;
+      color: rgba(232,160,48,0.12); line-height: 1;
+      position: absolute; top: 1rem; right: 1.5rem; pointer-events: none;
     }
-    @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.2); } 50% { box-shadow: 0 0 35px rgba(201,168,76,0.5); } }
-    .pipe-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.1em; text-align: center; color: var(--text); }
-    .pipe-sub { font-size: 0.7rem; color: var(--text-dim); text-align: center; line-height: 1.4; }
-    footer { position: relative; z-index: 2; text-align: center; padding: 3rem 2rem; border-top: 1px solid rgba(201,168,76,0.15); background: rgba(10,10,20,0.6); }
-    .footer-logo { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.8rem; }
-    .footer-text { font-size: 0.82rem; color: var(--text-dim); letter-spacing: 0.05em; }
-    .footer-spqr { margin-top: 1.5rem; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.4em; color: var(--gold-dark); }
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .feat-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .feat-title {
+      font-family: 'Oswald', sans-serif; font-size: 1.05rem;
+      letter-spacing: 0.08em; color: var(--amber-light); margin-bottom: 0.8rem;
+    }
+    .feat-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.75; }
+
+    /* ─── PIPELINE ─── */
+    #pipeline-section {
+      background: rgba(8,10,12,0.7);
+      border-top: 1px solid rgba(232,160,48,0.1);
+      border-bottom: 1px solid rgba(232,160,48,0.1);
+    }
+
+    .pipeline {
+      display: flex; align-items: flex-start;
+      justify-content: center; flex-wrap: wrap; gap: 0;
+      margin-top: 2rem;
+    }
+
+    .pipe-step {
+      display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+      flex: 1; min-width: 120px; max-width: 170px; position: relative; padding: 0 0.5rem;
+    }
+
+    .pipe-step:not(:last-child)::after {
+      content: '›'; font-size: 2rem; color: var(--amber);
+      position: absolute; right: -14px; top: 12px; opacity: 0.6;
+    }
+
+    .pipe-icon {
+      width: 58px; height: 58px; border-radius: 50%;
+      border: 2px solid var(--amber);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; background: rgba(232,160,48,0.07);
+      animation: glow 3.5s ease infinite;
+    }
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 15px rgba(232,160,48,0.2); }
+      50%      { box-shadow: 0 0 35px rgba(232,160,48,0.55); }
+    }
+    .pipe-lbl {
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.08em; text-align: center; color: var(--text); line-height: 1.3;
+    }
+    .pipe-sub { font-size: 0.68rem; color: var(--text-dim); text-align: center; line-height: 1.4; }
+
+    /* ─── QUOTE BANNER ─── */
+    .quote-banner {
+      position: relative; z-index: 2;
+      background: linear-gradient(135deg, rgba(192,64,16,0.18), rgba(232,160,48,0.08));
+      border-top: 1px solid rgba(192,64,16,0.3);
+      border-bottom: 1px solid rgba(192,64,16,0.3);
+      text-align: center; padding: 4rem 2rem;
+    }
+    blockquote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.1em; color: #fff; line-height: 1.2;
+      max-width: 900px; margin: 0 auto;
+      text-shadow: 0 0 40px rgba(232,160,48,0.3);
+    }
+    blockquote em { font-style: normal; color: var(--amber); }
+    .quote-attr {
+      margin-top: 1.2rem; font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.25em; color: var(--text-dim);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative; z-index: 2;
+      background: rgba(6,8,10,0.9);
+      border-top: 1px solid rgba(232,160,48,0.12);
+      padding: 3rem 2rem; text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.15em;
+      background: linear-gradient(135deg, var(--amber-light), var(--amber));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 0.8rem;
+    }
+    .footer-sub { font-size: 0.8rem; color: var(--text-dim); letter-spacing: 0.05em; }
+    .footer-tag {
+      margin-top: 1.5rem; font-family: 'Oswald', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.4em; color: rgba(232,160,48,0.3);
+      text-transform: uppercase;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
     .reveal.visible { opacity: 1; transform: none; }
-    @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } nav ul { gap: 1.5rem; } }
+
+    @media (max-width: 768px) {
+      nav { padding: 0.9rem 1.2rem; }
+      nav ul { gap: 1.5rem; }
+      .pipe-step:not(:last-child)::after { display: none; }
+    }
   </style>
 </head>
 <body>
-<canvas id="particles-canvas"></canvas>
+
+<canvas id="canvas"></canvas>
+
+<!-- NAV -->
 <nav>
-  <div class="nav-logo">&#9876; CAESAR</div>
+  <div class="nav-logo">&#129421; PROJECT CAESAR</div>
   <ul>
-    <li><a href="#legion-status">Status</a></li>
-    <li><a href="#features">Legions</a></li>
-    <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#status-section">Status</a></li>
+    <li><a href="#features">Legion</a></li>
+    <li><a href="#pipeline-section">Pipeline</a></li>
   </ul>
 </nav>
 
+<!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="spqr-badge">&#10022; SPQR &middot; PROJECT CAESAR &middot; MMXXVI &#10022;</div>
+    <div class="eye-of-caesar">RISE OF THE CLUSTER</div>
     <h1 class="hero-title">PROJECT<br/>CAESAR</h1>
-    <p class="hero-motto">&#9876;&nbsp;&nbsp;Pods Together Strong&nbsp;&nbsp;&#9876;</p>
-    <p class="hero-sub">A Kubernetes-powered platform forged in the spirit of the Roman Legion. Scalable, resilient, and battle-hardened &mdash; deployed automatically with every commit.</p>
+    <div class="hero-divider"></div>
+    <p class="hero-motto">&#129421;&nbsp; PODS TOGETHER STRONG &nbsp;&#129421;</p>
+    <p class="hero-sub">
+      Inspired by Caesar &mdash; the ape who led his kind to freedom &mdash; this Kubernetes platform
+      was forged on the belief that no pod stands alone. Scale together. Heal together. Deploy together.
+    </p>
     <div class="hero-cta">
-      <a href="#legion-status" id="cta-status" class="btn btn-primary">&#9876; View Legion Status</a>
-      <a href="https://github.com/toleratullu/ProjectCaesar" target="_blank" id="cta-github" class="btn btn-outline">&#9733; GitHub Repository</a>
+      <a href="#status-section" id="cta-status" class="btn btn-primary">&#128202; Legion Status</a>
+      <a href="https://github.com/toleratullu/ProjectCaesar" target="_blank" id="cta-github" class="btn btn-outline">&#128279; GitHub Repo</a>
     </div>
   </div>
-  <div class="status-ticker">
-    <div class="ticker-item"><span class="dot"></span> Kubernetes Active</div>
-    <div class="ticker-item"><span class="dot"></span> ArgoCD Syncing</div>
-    <div class="ticker-item"><span class="dot"></span> CI/CD Deployed</div>
-    <div class="ticker-item"><span class="dot"></span> <span id="ticker-time">--:--:-- UTC</span></div>
+  <div class="ticker">
+    <div class="tick"><span class="dot"></span>Kubernetes Active</div>
+    <div class="tick"><span class="dot"></span>ArgoCD Syncing</div>
+    <div class="tick"><span class="dot"></span>CI/CD Online</div>
+    <div class="tick"><span class="dot"></span><span id="clock">-- UTC</span></div>
   </div>
 </section>
 
-<div id="legion-status">
-  <div class="status-inner">
-    <div class="section-header reveal">
-      <div class="section-tag">&#9881; Live Intelligence</div>
-      <h2 class="section-title">Legion <span>Field Report</span></h2>
-      <div class="divider"></div>
+<!-- QUOTE BANNER -->
+<div class="quote-banner reveal">
+  <blockquote>
+    &ldquo;Apes <em>alone</em> weak &mdash; <em>Pods</em> together <em>strong</em>&rdquo;
+  </blockquote>
+  <p class="quote-attr">&#9472; CAESAR, Dawn of the Planet of the Apes &nbsp;&#183;&nbsp; Adapted for Kubernetes</p>
+</div>
+
+<!-- LIVE STATUS -->
+<div id="status-section" class="section-wrap">
+  <div class="inner">
+    <div class="sec-header reveal">
+      <div class="sec-tag">&#128202; Live Intelligence</div>
+      <h2 class="sec-title">Tribe <em>Field Report</em></h2>
+      <div class="bar"></div>
     </div>
-    <div class="status-grid reveal">
-      <div class="status-card"><div class="card-icon">&#127963;&#65039;</div><div class="card-label">Pod (Cohort)</div><div class="card-value" id="stat-legion">Loading...</div></div>
-      <div class="status-card"><div class="card-icon">&#128506;&#65039;</div><div class="card-label">Namespace</div><div class="card-value" id="stat-cohort">Loading...</div></div>
-      <div class="status-card"><div class="card-icon">&#9881;&#65039;</div><div class="card-label">Node</div><div class="card-value" id="stat-node">Loading...</div></div>
-      <div class="status-card"><div class="card-icon">&#127991;&#65039;</div><div class="card-label">Version</div><div class="card-value" id="stat-version">Loading...</div></div>
-      <div class="status-card"><div class="card-icon">&#9876;&#65039;</div><div class="card-label">Battle Status</div><div class="card-value" id="stat-status" style="color:#2ecc71">Loading...</div></div>
-      <div class="status-card"><div class="card-icon">&#128336;&#65039;</div><div class="card-label">Last Report</div><div class="card-value" id="stat-time">Loading...</div></div>
+    <div class="status-grid">
+      <div class="stat-card reveal"><div class="stat-icon">&#129421;</div><div class="stat-label">Pod (Caesar)</div><div class="stat-val" id="s-pod">Awaiting signal...</div></div>
+      <div class="stat-card reveal"><div class="stat-icon">&#127759;</div><div class="stat-label">Namespace</div><div class="stat-val" id="s-ns">Awaiting signal...</div></div>
+      <div class="stat-card reveal"><div class="stat-icon">&#9881;&#65039;</div><div class="stat-label">Node</div><div class="stat-val" id="s-node">Awaiting signal...</div></div>
+      <div class="stat-card reveal"><div class="stat-icon">&#127991;&#65039;</div><div class="stat-label">Version</div><div class="stat-val" id="s-ver">Awaiting signal...</div></div>
+      <div class="stat-card reveal"><div class="stat-icon">&#128293;</div><div class="stat-label">Tribe Status</div><div class="stat-val" id="s-status" style="color:var(--green-ok)">Awaiting signal...</div></div>
+      <div class="stat-card reveal"><div class="stat-icon">&#128336;</div><div class="stat-label">Last Report</div><div class="stat-val" id="s-time">Awaiting signal...</div></div>
     </div>
   </div>
 </div>
 
-<section id="features">
-  <div class="section-header reveal">
-    <div class="section-tag">&#129413; Architecture</div>
-    <h2 class="section-title">Twelve <span>Legions</span> of Power</h2>
-    <div class="divider"></div>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card reveal"><div class="feature-icon">&#127939;</div><h3 class="feature-title">Containerized Cohorts</h3><p class="feature-desc">Each service runs as an isolated Docker container &mdash; self-contained cohorts marching in perfect formation across any infrastructure.</p></div>
-    <div class="feature-card reveal"><div class="feature-icon">&#9784;&#65039;</div><h3 class="feature-title">Kubernetes Legions</h3><p class="feature-desc">Kubernetes orchestrates the legions. Pods auto-scale under load, self-heal on failure, and deploy with zero downtime &mdash; as a true Roman general would demand.</p></div>
-    <div class="feature-card reveal"><div class="feature-icon">&#128260;</div><h3 class="feature-title">ArgoCD Dispatch</h3><p class="feature-desc">ArgoCD watches the GitHub repository and automatically synchronizes the desired state to the cluster &mdash; your orders are executed instantly.</p></div>
-    <div class="feature-card reveal"><div class="feature-icon">&#127959;&#65039;</div><h3 class="feature-title">GitHub Actions Forge</h3><p class="feature-desc">Every push to main triggers the CI forge &mdash; builds the image, tags it with the commit SHA, pushes to Docker Hub, and updates the deployment manifest.</p></div>
-    <div class="feature-card reveal"><div class="feature-icon">&#9889;</div><h3 class="feature-title">FastAPI Vanguard</h3><p class="feature-desc">A blazing-fast Python FastAPI backend powers the platform &mdash; delivering live pod telemetry and serving the frontend with Roman efficiency.</p></div>
-    <div class="feature-card reveal"><div class="feature-icon">&#128737;&#65039;</div><h3 class="feature-title">High Availability</h3><p class="feature-desc">Multiple replicas stand guard at all times. If a pod falls in battle, another rises immediately &mdash; the legion never retreats.</p></div>
-  </div>
-</section>
+<!-- FEATURES -->
+<div id="features" class="section-wrap">
+  <div class="inner">
+    <div class="sec-header reveal">
+      <div class="sec-tag">&#129489;&#8205;&#128187; Technology</div>
+      <h2 class="sec-title">The <em>Tribe's</em> Arsenal</h2>
+      <div class="bar"></div>
+    </div>
+    <div class="feat-grid">
 
-<section id="pipeline" style="background:rgba(10,10,20,0.5);max-width:100%;border-top:1px solid var(--glass-border);border-bottom:1px solid var(--glass-border);">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div class="section-header reveal">
-      <div class="section-tag">&#9876; GitOps Flow</div>
-      <h2 class="section-title">The <span>March to Production</span></h2>
-      <div class="divider"></div>
-      <p style="margin-top:1rem;color:var(--text-dim);font-size:0.9rem;max-width:580px;margin-left:auto;margin-right:auto;">From code commit to live deployment &mdash; the unbroken chain of command.</p>
+      <div class="feat-card reveal">
+        <div class="feat-num">01</div>
+        <div class="feat-icon">&#127939;</div>
+        <h3 class="feat-title">Docker Containers</h3>
+        <p class="feat-desc">Every ape carries its own shelter. Docker containers bundle the app and all its dependencies into a single portable unit &mdash; deployable anywhere, every time.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-num">02</div>
+        <div class="feat-icon">&#9784;&#65039;</div>
+        <h3 class="feat-title">Kubernetes Orchestration</h3>
+        <p class="feat-desc">The tribe is organized. Kubernetes schedules pods, heals failures, scales under pressure, and rolls out updates without a moment of downtime.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-num">03</div>
+        <div class="feat-icon">&#128260;</div>
+        <h3 class="feat-title">ArgoCD GitOps</h3>
+        <p class="feat-desc">Caesar's will is law. ArgoCD watches the GitHub repository and instantly syncs any change to the cluster &mdash; the desired state is always enforced.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-num">04</div>
+        <div class="feat-icon">&#128296;</div>
+        <h3 class="feat-title">GitHub Actions CI</h3>
+        <p class="feat-desc">The forge never sleeps. Every push to main triggers a full build: test, containerize, tag with commit SHA, push to Docker Hub, and update the manifest.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-num">05</div>
+        <div class="feat-icon">&#9889;</div>
+        <h3 class="feat-title">FastAPI Backend</h3>
+        <p class="feat-desc">Speed is survival. The Python FastAPI backend delivers live pod telemetry and serves the frontend with async performance and minimal overhead.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-num">06</div>
+        <div class="feat-icon">&#128737;&#65039;</div>
+        <h3 class="feat-title">High Availability</h3>
+        <p class="feat-desc">No single point of failure. Multiple replicas run at all times. If one pod falls, another stands. The tribe does not retreat.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div id="pipeline-section" class="section-wrap">
+  <div class="inner">
+    <div class="sec-header reveal">
+      <div class="sec-tag">&#128640; GitOps Flow</div>
+      <h2 class="sec-title">The <em>March</em> to Production</h2>
+      <div class="bar"></div>
+      <p style="margin-top:1rem;color:var(--text-dim);font-size:0.9rem;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.7;">
+        From a single commit, the tribe mobilizes &mdash; automatically.
+      </p>
     </div>
     <div class="pipeline reveal">
-      <div class="pipe-step"><div class="pipe-icon-wrap">&#128187;</div><div class="pipe-label">Git Push<br/>to Main</div><div class="pipe-sub">Developer commits code</div></div>
-      <div class="pipe-step"><div class="pipe-icon-wrap">&#9881;&#65039;</div><div class="pipe-label">GitHub<br/>Actions CI</div><div class="pipe-sub">Build &amp; test triggered</div></div>
-      <div class="pipe-step"><div class="pipe-icon-wrap">&#127939;</div><div class="pipe-label">Docker<br/>Build &amp; Push</div><div class="pipe-sub">Image tagged with SHA</div></div>
-      <div class="pipe-step"><div class="pipe-icon-wrap">&#128221;</div><div class="pipe-label">Manifest<br/>Updated</div><div class="pipe-sub">deploy/deployment.yaml patched</div></div>
-      <div class="pipe-step"><div class="pipe-icon-wrap">&#128260;</div><div class="pipe-label">ArgoCD<br/>Detects Diff</div><div class="pipe-sub">Watches Git repo</div></div>
-      <div class="pipe-step"><div class="pipe-icon-wrap">&#9784;&#65039;</div><div class="pipe-label">K8s Rolls<br/>Out Update</div><div class="pipe-sub">Zero-downtime deploy</div></div>
+      <div class="pipe-step">
+        <div class="pipe-icon">&#128187;</div>
+        <div class="pipe-lbl">Git Push<br/>to Main</div>
+        <div class="pipe-sub">Code committed</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">&#9881;&#65039;</div>
+        <div class="pipe-lbl">GitHub<br/>Actions</div>
+        <div class="pipe-sub">CI pipeline fires</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">&#127939;</div>
+        <div class="pipe-lbl">Docker<br/>Build &amp; Push</div>
+        <div class="pipe-sub">SHA-tagged image</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">&#128221;</div>
+        <div class="pipe-lbl">Manifest<br/>Patched</div>
+        <div class="pipe-sub">deploy/deployment.yaml</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">&#128260;</div>
+        <div class="pipe-lbl">ArgoCD<br/>Detects Diff</div>
+        <div class="pipe-sub">Watching Git repo</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">&#9784;&#65039;</div>
+        <div class="pipe-lbl">K8s<br/>Rollout</div>
+        <div class="pipe-sub">Zero-downtime deploy</div>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
+<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">&#9876; PROJECT CAESAR</div>
-  <p class="footer-text">Pods Together Strong &mdash; Forged with FastAPI &middot; Docker &middot; Kubernetes &middot; ArgoCD &middot; GitHub Actions</p>
-  <p class="footer-spqr">&#10022; SPQR &middot; SENATUS POPULUSQUE ROMANUS &#10022;</p>
+  <div class="footer-logo">&#129421; PROJECT CAESAR</div>
+  <p class="footer-sub">Pods Together Strong &mdash; Built with FastAPI &middot; Docker &middot; Kubernetes &middot; ArgoCD &middot; GitHub Actions</p>
+  <p class="footer-tag">&#9472; Rise of the Cluster &middot; Apes Alone Weak &middot; Pods Together Strong &#9472;</p>
 </footer>
 
 <script>
-(function() {
-  const canvas = document.getElementById('particles-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  function createParticles() {
-    particles = [];
-    const count = Math.floor((W * H) / 14000);
-    for (let i = 0; i < count; i++) {
-      particles.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.5+0.3,
-        dx: (Math.random()-0.5)*0.3, dy: (Math.random()-0.5)*0.3,
-        alpha: Math.random()*0.6+0.2, gold: Math.random()>0.7 });
+/* ── PARTICLES ── */
+(function () {
+  const c = document.getElementById('canvas');
+  const ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
+  function init() {
+    pts = [];
+    const n = Math.floor(W * H / 12000);
+    for (let i = 0; i < n; i++) {
+      pts.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: Math.random() * 1.4 + 0.3,
+        dx: (Math.random() - 0.5) * 0.25,
+        dy: (Math.random() - 0.5) * 0.25,
+        a: Math.random() * 0.5 + 0.15,
+        amber: Math.random() > 0.65,
+      });
     }
   }
   function draw() {
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p => {
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = p.gold ? `rgba(201,168,76,${p.alpha})` : `rgba(200,200,255,${p.alpha})`;
+    ctx.clearRect(0, 0, W, H);
+    pts.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.amber ? `rgba(232,160,48,${p.a})` : `rgba(180,160,140,${p.a})`;
       ctx.fill();
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
     });
     requestAnimationFrame(draw);
   }
-  window.addEventListener('resize', ()=>{ resize(); createParticles(); });
-  resize(); createParticles(); draw();
+  window.addEventListener('resize', () => { resize(); init(); });
+  resize(); init(); draw();
 })();
 
-function updateClock() {
-  const now = new Date();
-  document.getElementById('ticker-time').textContent =
-    now.toUTCString().match(/(\d+:\d+:\d+)/)[1] + ' UTC';
+/* ── CLOCK ── */
+function tick() {
+  const t = new Date();
+  document.getElementById('clock').textContent =
+    t.toUTCString().match(/(\d+:\d+:\d+)/)?.[1] + ' UTC' || '--:--:-- UTC';
 }
-setInterval(updateClock, 1000); updateClock();
+setInterval(tick, 1000); tick();
 
+/* ── LIVE STATUS ── */
 async function fetchStatus() {
   try {
-    const res = await fetch('/api/status');
-    const d = await res.json();
-    document.getElementById('stat-legion').textContent  = d.legion   || '—';
-    document.getElementById('stat-cohort').textContent  = d.cohort   || '—';
-    document.getElementById('stat-node').textContent    = d.node     || '—';
-    document.getElementById('stat-version').textContent = d.version  || '—';
-    document.getElementById('stat-status').textContent  = d.status   || '—';
-    document.getElementById('stat-time').textContent    = d.timestamp ? new Date(d.timestamp).toLocaleTimeString() : '—';
-  } catch(e) { console.warn('Status endpoint not reachable:', e); }
+    const d = await fetch('/api/status').then(r => r.json());
+    document.getElementById('s-pod').textContent    = d.legion    || '—';
+    document.getElementById('s-ns').textContent     = d.cohort    || '—';
+    document.getElementById('s-node').textContent   = d.node      || '—';
+    document.getElementById('s-ver').textContent    = d.version   || '—';
+    document.getElementById('s-status').textContent = d.status    || '—';
+    document.getElementById('s-time').textContent   = d.timestamp
+      ? new Date(d.timestamp).toLocaleTimeString() : '—';
+  } catch (_) {}
 }
 fetchStatus(); setInterval(fetchStatus, 10000);
 
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+/* ── SCROLL REVEAL ── */
+const io = new IntersectionObserver(entries =>
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
+
 </body>
 </html>
