@@ -1,0 +1,11 @@
+.git
+.github
+.agents
+*.md
+deploy/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv
+venv/
