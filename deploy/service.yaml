@@ -1,0 +1,17 @@
+# ── Service ───────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: caesar-app
+  namespace: caesar
+  labels:
+    app: caesar-app
+spec:
+  selector:
+    app: caesar-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP   # Change to LoadBalancer if you need external access without Ingress
