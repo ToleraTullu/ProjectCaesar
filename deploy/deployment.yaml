@@ -18,7 +18,7 @@ spec:
       containers:
         - name: app
           #newchange
-          image: toleratullu/caesar-app:latest # CI workflow will overwrite this tag automatically
+          image: toleratullu/caesar-app:sha-25b734e
           ports:
             - containerPort: 8000
           # Expose Kubernetes metadata into the container so the status API can read them
