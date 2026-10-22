@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: caesar-app
-  namespace: caesar   # moved from default → caesar namespace
+  namespace: caesar # moved from default → caesar namespace
   labels:
     app: caesar-app
 spec:
@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: app
-          image: toleratullu/caesar-app:latest  # CI workflow will overwrite this tag automatically
+          #newchange
+          image: toleratullu/caesar-app:latest # CI workflow will overwrite this tag automatically
           ports:
             - containerPort: 8000
           # Expose Kubernetes metadata into the container so the status API can read them
@@ -35,7 +36,7 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
             - name: APP_VERSION
-              value: "1.0.0"   # CI workflow can also update this
+              value: "1.0.0" # CI workflow can also update this
           # Liveness & readiness probes
           livenessProbe:
             httpGet:
