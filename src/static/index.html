@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Caesar | Pods Together Strong</title>
+  <meta name="description" content="Project Caesar — a Kubernetes-powered platform inspired by the Roman Legions. Pods together strong." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:        #c9a84c;
+      --gold-light:  #f0d080;
+      --gold-dark:   #8b6914;
+      --smoke:       #1a1a2e;
+      --smoke-mid:   #16213e;
+      --smoke-light: #0f3460;
+      --glass:       rgba(255,255,255,0.06);
+      --glass-border:rgba(201,168,76,0.25);
+      --text:        #e8dcc8;
+      --text-dim:    #a09070;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--smoke); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    #particles-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: rgba(10,10,20,0.75); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: 0.08em;
+    }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.3s;
+    }
+    nav ul a:hover { color: var(--gold-light); }
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 4rem; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('/static/hero.jpg') center/cover no-repeat;
+      filter: brightness(0.30) saturate(1.3); z-index: 0;
+      animation: subtleZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes subtleZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,20,0.1) 0%, rgba(10,10,20,0.4) 60%, var(--smoke) 100%);
+      z-index: 1;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .spqr-badge {
+      display: inline-block; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.3em;
+      color: var(--gold); border: 1px solid var(--gold-dark); padding: 0.4rem 1.2rem; border-radius: 2px;
+      margin-bottom: 1.5rem; animation: fadeUp 0.8s ease both;
+    }
+    h1.hero-title {
+      font-family: 'Cinzel', serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 900;
+      line-height: 1.0; letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #ffffff 30%, var(--gold-light) 70%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: fadeUp 0.9s ease 0.1s both;
+    }
+    .hero-motto {
+      margin-top: 1.2rem; font-family: 'Cinzel', serif; font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
+      animation: fadeUp 0.9s ease 0.2s both;
+    }
+    .hero-sub {
+      margin-top: 1rem; font-size: 1.05rem; color: var(--text-dim);
+      max-width: 580px; margin-left: auto; margin-right: auto; line-height: 1.7;
+      animation: fadeUp 0.9s ease 0.3s both;
+    }
+    .hero-cta {
+      margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 0.9s ease 0.4s both;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2rem;
+      border-radius: 3px; font-family: 'Cinzel', serif; font-size: 0.85rem;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #0a0a14; font-weight: 700; border: none;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
+    .btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold-dark); }
+    .btn-outline:hover { background: rgba(201,168,76,0.1); transform: translateY(-2px); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .status-ticker {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); z-index: 2;
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 1s ease 0.6s both;
+    }
+    .ticker-item {
+      background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px);
+      padding: 0.6rem 1.4rem; border-radius: 4px; font-size: 0.78rem; letter-spacing: 0.1em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .ticker-item .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #2ecc71;
+      box-shadow: 0 0 8px #2ecc71; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    section { position: relative; z-index: 2; padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+    .section-tag { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.35em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #fff; line-height: 1.2; }
+    .section-title span { background: linear-gradient(135deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .divider { width: 60px; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 1rem auto 0; }
+    #legion-status { background: linear-gradient(135deg, rgba(22,33,62,0.6), rgba(15,52,96,0.3)); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); max-width: 100%; padding: 5rem 2rem; }
+    .status-inner { max-width: 1200px; margin: 0 auto; }
+    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .status-card {
+      background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(12px);
+      border-radius: 8px; padding: 2rem 1.5rem; text-align: center; transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .status-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(201,168,76,0.15); }
+    .status-card .card-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+    .status-card .card-label { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.5rem; }
+    .status-card .card-value { font-size: 1.05rem; font-weight: 600; color: #fff; word-break: break-all; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+    .feature-card {
+      background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; padding: 2.2rem;
+      position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      transform: scaleX(0); transition: transform 0.4s ease;
+    }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,0,0,0.4); }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 1.2rem; }
+    .feature-title { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 0.8rem; }
+    .feature-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
+    .pipeline { display: flex; align-items: flex-start; justify-content: center; gap: 0; flex-wrap: wrap; margin-top: 1rem; }
+    .pipe-step { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; flex: 1; min-width: 130px; max-width: 180px; position: relative; }
+    .pipe-step:not(:last-child)::after { content: 'arrow_forward'; font-family: 'Material Icons'; position: absolute; right: -18px; top: 17px; color: var(--gold); font-size: 1.4rem; z-index: 1; }
+    .pipe-icon-wrap {
+      width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+      background: rgba(201,168,76,0.08); animation: glowPulse 3s ease infinite;
+    }
+    @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.2); } 50% { box-shadow: 0 0 35px rgba(201,168,76,0.5); } }
+    .pipe-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.1em; text-align: center; color: var(--text); }
+    .pipe-sub { font-size: 0.7rem; color: var(--text-dim); text-align: center; line-height: 1.4; }
+    footer { position: relative; z-index: 2; text-align: center; padding: 3rem 2rem; border-top: 1px solid rgba(201,168,76,0.15); background: rgba(10,10,20,0.6); }
+    .footer-logo { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.8rem; }
+    .footer-text { font-size: 0.82rem; color: var(--text-dim); letter-spacing: 0.05em; }
+    .footer-spqr { margin-top: 1.5rem; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.4em; color: var(--gold-dark); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } nav ul { gap: 1.5rem; } }
+  </style>
+</head>
+<body>
+<canvas id="particles-canvas"></canvas>
+<nav>
+  <div class="nav-logo">&#9876; CAESAR</div>
+  <ul>
+    <li><a href="#legion-status">Status</a></li>
+    <li><a href="#features">Legions</a></li>
+    <li><a href="#pipeline">Pipeline</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="spqr-badge">&#10022; SPQR &middot; PROJECT CAESAR &middot; MMXXVI &#10022;</div>
+    <h1 class="hero-title">PROJECT<br/>CAESAR</h1>
+    <p class="hero-motto">&#9876;&nbsp;&nbsp;Pods Together Strong&nbsp;&nbsp;&#9876;</p>
+    <p class="hero-sub">A Kubernetes-powered platform forged in the spirit of the Roman Legion. Scalable, resilient, and battle-hardened &mdash; deployed automatically with every commit.</p>
+    <div class="hero-cta">
+      <a href="#legion-status" id="cta-status" class="btn btn-primary">&#9876; View Legion Status</a>
+      <a href="https://github.com/toleratullu/ProjectCaesar" target="_blank" id="cta-github" class="btn btn-outline">&#9733; GitHub Repository</a>
+    </div>
+  </div>
+  <div class="status-ticker">
+    <div class="ticker-item"><span class="dot"></span> Kubernetes Active</div>
+    <div class="ticker-item"><span class="dot"></span> ArgoCD Syncing</div>
+    <div class="ticker-item"><span class="dot"></span> CI/CD Deployed</div>
+    <div class="ticker-item"><span class="dot"></span> <span id="ticker-time">--:--:-- UTC</span></div>
+  </div>
+</section>
+
+<div id="legion-status">
+  <div class="status-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">&#9881; Live Intelligence</div>
+      <h2 class="section-title">Legion <span>Field Report</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="status-grid reveal">
+      <div class="status-card"><div class="card-icon">&#127963;&#65039;</div><div class="card-label">Pod (Cohort)</div><div class="card-value" id="stat-legion">Loading...</div></div>
+      <div class="status-card"><div class="card-icon">&#128506;&#65039;</div><div class="card-label">Namespace</div><div class="card-value" id="stat-cohort">Loading...</div></div>
+      <div class="status-card"><div class="card-icon">&#9881;&#65039;</div><div class="card-label">Node</div><div class="card-value" id="stat-node">Loading...</div></div>
+      <div class="status-card"><div class="card-icon">&#127991;&#65039;</div><div class="card-label">Version</div><div class="card-value" id="stat-version">Loading...</div></div>
+      <div class="status-card"><div class="card-icon">&#9876;&#65039;</div><div class="card-label">Battle Status</div><div class="card-value" id="stat-status" style="color:#2ecc71">Loading...</div></div>
+      <div class="status-card"><div class="card-icon">&#128336;&#65039;</div><div class="card-label">Last Report</div><div class="card-value" id="stat-time">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<section id="features">
+  <div class="section-header reveal">
+    <div class="section-tag">&#129413; Architecture</div>
+    <h2 class="section-title">Twelve <span>Legions</span> of Power</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal"><div class="feature-icon">&#127939;</div><h3 class="feature-title">Containerized Cohorts</h3><p class="feature-desc">Each service runs as an isolated Docker container &mdash; self-contained cohorts marching in perfect formation across any infrastructure.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">&#9784;&#65039;</div><h3 class="feature-title">Kubernetes Legions</h3><p class="feature-desc">Kubernetes orchestrates the legions. Pods auto-scale under load, self-heal on failure, and deploy with zero downtime &mdash; as a true Roman general would demand.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">&#128260;</div><h3 class="feature-title">ArgoCD Dispatch</h3><p class="feature-desc">ArgoCD watches the GitHub repository and automatically synchronizes the desired state to the cluster &mdash; your orders are executed instantly.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">&#127959;&#65039;</div><h3 class="feature-title">GitHub Actions Forge</h3><p class="feature-desc">Every push to main triggers the CI forge &mdash; builds the image, tags it with the commit SHA, pushes to Docker Hub, and updates the deployment manifest.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">&#9889;</div><h3 class="feature-title">FastAPI Vanguard</h3><p class="feature-desc">A blazing-fast Python FastAPI backend powers the platform &mdash; delivering live pod telemetry and serving the frontend with Roman efficiency.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">&#128737;&#65039;</div><h3 class="feature-title">High Availability</h3><p class="feature-desc">Multiple replicas stand guard at all times. If a pod falls in battle, another rises immediately &mdash; the legion never retreats.</p></div>
+  </div>
+</section>
+
+<section id="pipeline" style="background:rgba(10,10,20,0.5);max-width:100%;border-top:1px solid var(--glass-border);border-bottom:1px solid var(--glass-border);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section-header reveal">
+      <div class="section-tag">&#9876; GitOps Flow</div>
+      <h2 class="section-title">The <span>March to Production</span></h2>
+      <div class="divider"></div>
+      <p style="margin-top:1rem;color:var(--text-dim);font-size:0.9rem;max-width:580px;margin-left:auto;margin-right:auto;">From code commit to live deployment &mdash; the unbroken chain of command.</p>
+    </div>
+    <div class="pipeline reveal">
+      <div class="pipe-step"><div class="pipe-icon-wrap">&#128187;</div><div class="pipe-label">Git Push<br/>to Main</div><div class="pipe-sub">Developer commits code</div></div>
+      <div class="pipe-step"><div class="pipe-icon-wrap">&#9881;&#65039;</div><div class="pipe-label">GitHub<br/>Actions CI</div><div class="pipe-sub">Build &amp; test triggered</div></div>
+      <div class="pipe-step"><div class="pipe-icon-wrap">&#127939;</div><div class="pipe-label">Docker<br/>Build &amp; Push</div><div class="pipe-sub">Image tagged with SHA</div></div>
+      <div class="pipe-step"><div class="pipe-icon-wrap">&#128221;</div><div class="pipe-label">Manifest<br/>Updated</div><div class="pipe-sub">deploy/deployment.yaml patched</div></div>
+      <div class="pipe-step"><div class="pipe-icon-wrap">&#128260;</div><div class="pipe-label">ArgoCD<br/>Detects Diff</div><div class="pipe-sub">Watches Git repo</div></div>
+      <div class="pipe-step"><div class="pipe-icon-wrap">&#9784;&#65039;</div><div class="pipe-label">K8s Rolls<br/>Out Update</div><div class="pipe-sub">Zero-downtime deploy</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">&#9876; PROJECT CAESAR</div>
+  <p class="footer-text">Pods Together Strong &mdash; Forged with FastAPI &middot; Docker &middot; Kubernetes &middot; ArgoCD &middot; GitHub Actions</p>
+  <p class="footer-spqr">&#10022; SPQR &middot; SENATUS POPULUSQUE ROMANUS &#10022;</p>
+</footer>
+
+<script>
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function createParticles() {
+    particles = [];
+    const count = Math.floor((W * H) / 14000);
+    for (let i = 0; i < count; i++) {
+      particles.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.5+0.3,
+        dx: (Math.random()-0.5)*0.3, dy: (Math.random()-0.5)*0.3,
+        alpha: Math.random()*0.6+0.2, gold: Math.random()>0.7 });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = p.gold ? `rgba(201,168,76,${p.alpha})` : `rgba(200,200,255,${p.alpha})`;
+      ctx.fill();
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', ()=>{ resize(); createParticles(); });
+  resize(); createParticles(); draw();
+})();
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('ticker-time').textContent =
+    now.toUTCString().match(/(\d+:\d+:\d+)/)[1] + ' UTC';
+}
+setInterval(updateClock, 1000); updateClock();
+
+async function fetchStatus() {
+  try {
+    const res = await fetch('/api/status');
+    const d = await res.json();
+    document.getElementById('stat-legion').textContent  = d.legion   || '—';
+    document.getElementById('stat-cohort').textContent  = d.cohort   || '—';
+    document.getElementById('stat-node').textContent    = d.node     || '—';
+    document.getElementById('stat-version').textContent = d.version  || '—';
+    document.getElementById('stat-status').textContent  = d.status   || '—';
+    document.getElementById('stat-time').textContent    = d.timestamp ? new Date(d.timestamp).toLocaleTimeString() : '—';
+  } catch(e) { console.warn('Status endpoint not reachable:', e); }
+}
+fetchStatus(); setInterval(fetchStatus, 10000);
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
