@@ -1,4 +1,3 @@
-# ── Service ───────────────────────────────────────────────────
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,4 +13,4 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 8000
-  type: ClusterIP   # Change to LoadBalancer if you need external access without Ingress
+  type: LoadBalancer
