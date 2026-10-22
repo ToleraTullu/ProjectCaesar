@@ -55,7 +55,7 @@ jobs:
 
           # Build the exact image tag that docker/metadata-action produced
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          FULL_IMAGE="${{ secrets.DOCKER_HUB_USERNAME }}/caesar-app:sha-${SHORT_SHA}"
+          FULL_IMAGE="${{ secrets.DOCKER_USERNAME }}/caesar-app:sha-${SHORT_SHA}"
 
           echo "Updating deployment manifest with image: $FULL_IMAGE"
 
