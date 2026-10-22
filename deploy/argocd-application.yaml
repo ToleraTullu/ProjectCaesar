@@ -1,0 +1,39 @@
+# ── ArgoCD Application ────────────────────────────────────────
+# Apply this to your cluster with:
+#   kubectl apply -f deploy/argocd-application.yaml -n argocd
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: caesar-app
+  namespace: argocd        # ArgoCD lives in the argocd namespace
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  # Source: watch the deploy/ directory in your GitHub repo
+  source:
+    repoURL: https://github.com/toleratullu/ProjectCaesar.git
+    targetRevision: main   # track the main branch
+    path: deploy           # only sync manifests inside deploy/
+
+  # Destination: the caesar namespace on the in-cluster k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: caesar
+
+  # Sync policy: auto-sync on every commit, prune deleted resources,
+  # and self-heal if someone manually edits the cluster
+  syncPolicy:
+    automated:
+      prune: true        # delete resources removed from Git
+      selfHeal: true     # revert manual cluster changes
+    syncOptions:
+      - CreateNamespace=true   # auto-create the caesar namespace if missing
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
