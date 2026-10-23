@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app
-          #newchange
+
           image: toleratullu/caesar-app:latest # CI workflow will overwrite this tag automatically
           ports:
             - containerPort: 8000
