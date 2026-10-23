@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: clean markdown files
-        run: rm !(README.md|*.!(md))
+        run: rm *.md
 
       - name: Checkout Repository
         uses: actions/checkout@v4
