@@ -12,9 +12,6 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: clean markdown files
-        run: rm *.md
-
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
