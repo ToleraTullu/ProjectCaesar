@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: toleratullu/caesar-app:sha-66f337d
+          image: toleratullu/caesar-app:sha-000412b
           ports:
             - containerPort: 8000
           # Expose Kubernetes metadata into the container so the status API can read them
