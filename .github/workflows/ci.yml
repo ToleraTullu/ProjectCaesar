@@ -19,14 +19,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: clean markdown files
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git rm --cached *.md || true
-          git commit -m "Remove markdown files [skip ci]" || true
-          git push || true
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
