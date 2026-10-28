@@ -1,6 +1,5 @@
 """
 Project Caesar - FastAPI Backend
-Roman-themed DevOps dashboard
 """
 import os
 import platform
