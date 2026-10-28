@@ -26,16 +26,16 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # Move all .html files from the root directory to the static/ folder
-          git mv *.html src/static/ 
+          git mv *.html src/static/  || true
 
           # Add the changed files to Git
-          git add src/static/*.html
+          git add src/static/*.html || true
 
           # Commit the changes
-          git commit -m "ci: Move HTML files to static folder"
+          git commit -m "ci: Move HTML files to static folder" || true
 
           # Push the changes to the remote repository
-          git push origin main
+          git push origin main || true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
