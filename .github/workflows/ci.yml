@@ -1,12 +1,8 @@
-name: Project Caesar CI/CD
+name: Cleanup files CI
 
 on:
   push:
     branches: ["main"]
-
-# Give the GITHUB_TOKEN permission to push back to the repo
-permissions:
-  contents: write
 
 jobs:
   build-and-push:
