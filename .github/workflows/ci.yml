@@ -4,6 +4,9 @@ on:
   push:
     branches: ["main"]
 
+permissions:
+  contents: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -28,7 +31,7 @@ jobs:
           git add src/static/*.html || true
 
           # Commit the changes
-          git commit -m "ci: Move HTML files to static folder" || true
+          git commit -m "ci: Move HTML files to static folder [skip ci]" || true
 
           # Push the changes to the remote repository
           git push origin main || true
@@ -38,6 +41,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
           pip install pytest
+          pip install httpx
+
       - name: Run Unit Test
         run: |
           pytest testpy/ || echo "No file inside the src/test file"
