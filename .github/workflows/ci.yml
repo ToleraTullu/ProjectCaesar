@@ -40,4 +40,4 @@ jobs:
           pip install pytest
       - name: Run Unit Test
         run: |
-          pytest src/testpy/ || echo "No file inside the src/test file"
+          pytest testpy/ || echo "No file inside the src/test file"
