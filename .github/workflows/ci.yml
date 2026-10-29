@@ -45,5 +45,5 @@ jobs:
 
       - name: Run Unit Test
         run: |
-          PYTHONPATH=.
+          PYTHONPATH=..
           pytest testpy/
